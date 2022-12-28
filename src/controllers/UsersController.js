@@ -1,4 +1,5 @@
 import User from "../models/User"
+import { createPasswordHash } from "../services/auth";
 
 class UsersController {
   async index(req, res) {
@@ -29,9 +30,14 @@ class UsersController {
           .json({ message: 'User ${email} already exists.' });
       }
 
-      const newUser = await User.create({ email, password });
+      const encryptedPassword = await createPasswordHash(password)
 
-      return res.status(200).json(newUser);
+      const newUser = await User.create({ 
+        email, 
+        password: encryptedPassword 
+      });
+
+      return res.status(201).json(newUser);
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: "Internal server error." });
