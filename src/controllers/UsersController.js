@@ -1,4 +1,5 @@
 import User from "../models/User"
+
 import { createPasswordHash } from "../services/auth";
 
 class UsersController {
